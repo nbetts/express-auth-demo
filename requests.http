@@ -1,0 +1,25 @@
+### Register
+# @name register
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "foo"
+}
+
+### Log in
+# @name logIn
+POST http://localhost:3000/logIn
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "foo"
+}
+
+### Get user details
+# @name user
+GET http://localhost:3000/user
+Content-Type: application/json
+Authorization: {{logIn.response.headers.Authorization}}
