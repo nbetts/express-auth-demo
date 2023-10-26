@@ -33,6 +33,19 @@ export const getUser: RequestHandler = (request, response) => {
   }
 };
 
+export const updateUser: RequestHandler = (request, response) => {
+  const { name } = request.body;
+
+  try {
+    db.updateUserDetails(request.userId, name);
+    response.end();
+  } catch (error) {
+    response.status(404).json({
+      error: 'User not found',
+    });
+  }
+};
+
 export const register: RequestHandler = (request, response, next) => {
   const { email, password } = request.body;
 

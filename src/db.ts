@@ -57,3 +57,13 @@ export const readUserDetails = (id: string) => {
 
   return userDetails;
 };
+
+export const updateUserDetails = (id: string, name: string) => {
+  const userIndex = users.findIndex((user) => user.id === id);
+
+  if (userIndex < 0) {
+    throw new Error('User does not exist');
+  }
+
+  users[userIndex].name = name;
+};

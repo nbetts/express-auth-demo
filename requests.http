@@ -19,7 +19,17 @@ Content-Type: application/json
 }
 
 ### Get user details
-# @name user
+# @name getUser
 GET http://localhost:3000/user
 Content-Type: application/json
 Authorization: {{logIn.response.headers.Authorization}}
+
+### Update user details
+# @name updateUser
+POST http://localhost:3000/user
+Content-Type: application/json
+Authorization: {{logIn.response.headers.Authorization}}
+
+{
+  "name": "Nathan Betts"
+}
