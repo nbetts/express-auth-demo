@@ -10,6 +10,7 @@ export const createUser = (user: User) => {
   }
 
   users[user.id] = user;
+  console.log({ users });
 };
 
 export const readUser = (userId: string) => {
