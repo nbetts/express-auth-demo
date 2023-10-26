@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
 import * as db from '../db';
-import { createSessionToken, hashPassword, verifySessionToken } from '../utilities';
+import { createSessionToken, createPasswordHash, verifySessionToken } from '../utilities';
+import { randomUUID } from 'crypto';
+import { User } from '../types';
 
 const authorizationHeaderPrefix = 'Bearer ';
 
@@ -23,11 +25,19 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
 };
 
 export const register: RequestHandler = (request, response, next) => {
-  const { email, password } = request.body;
+  const { email, password, name } = request.body;
 
   try {
-    const hashedPassword = hashPassword(password);
-    db.createUser(email, hashedPassword);
+    const userId = randomUUID();
+    const passwordHash = createPasswordHash(password, userId);
+    const user: User = {
+      id: userId,
+      email,
+      passwordHash,
+      name,
+    };
+
+    db.createUser(user);
     next();
   } catch (error) {
     response.status(409).json({
@@ -41,9 +51,9 @@ export const logIn: RequestHandler = (request, response) => {
 
   try {
     const user = db.readUserByEmail(email);
-    const hashedPassword = hashPassword(password);
+    const passwordHash = createPasswordHash(password, user.id);
 
-    if (user.hashedPassword !== hashedPassword) {
+    if (user.passwordHash !== passwordHash) {
       throw new Error(`Incorrect password`);
     }
 

@@ -4,8 +4,8 @@ import { sign, verify } from 'jsonwebtoken';
 const tokenExpiresIn = 60; // in seconds
 const tokenSigningKey = 'my secret key';
 
-export const hashPassword = (password: string) => {
-  return createHash('sha256').update(password).digest('hex');
+export const createPasswordHash = (password: string, salt: string) => {
+  return createHash('sha256').update(password + salt).digest('hex');
 };
 
 export const createSessionToken = (userId: string) => {

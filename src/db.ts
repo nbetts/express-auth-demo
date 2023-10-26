@@ -1,24 +1,15 @@
-import { randomUUID } from 'crypto';
 import { User } from './types';
 
 const users: Record<string, User> = {};
 
-export const createUser = (email: string, hashedPassword: string) => {
-  const existingUser = Object.entries(users).find(([, user]) => user.email === email);
+export const createUser = (user: User) => {
+  const userEntry = Object.entries(users).find(([, existingUser]) => existingUser.email === user.email);
 
-  if (existingUser) {
+  if (userEntry) {
     throw new Error('User already exists');
   }
 
-  const userId = randomUUID();
-  const user: User = {
-    id: userId,
-    email,
-    hashedPassword,
-    name: '',
-  };
-
-  users[userId] = user;
+  users[user.id] = user;
 };
 
 export const readUser = (userId: string) => {
@@ -32,7 +23,7 @@ export const readUser = (userId: string) => {
 };
 
 export const readUserByEmail = (email: string) => {
-  const userEntry = Object.entries(users).find(([, user]) => user.email === email);
+  const userEntry = Object.entries(users).find(([, existingUser]) => existingUser.email === email);
 
   if (!userEntry) {
     throw new Error('User does not exist');
