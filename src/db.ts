@@ -1,10 +1,9 @@
 import { randomUUID } from 'crypto';
 import { User } from './types';
-import { createSessionToken, hashPassword } from './utilities';
 
 const users: Record<string, User> = {};
 
-export const createUser = (email: string, password: string) => {
+export const createUser = (email: string, hashedPassword: string) => {
   const existingUser = Object.entries(users).find(([, user]) => user.email === email);
 
   if (existingUser) {
@@ -15,52 +14,43 @@ export const createUser = (email: string, password: string) => {
   const user: User = {
     id: userId,
     email,
-    hashedPassword: hashPassword(password),
+    hashedPassword,
     name: '',
   };
 
   users[userId] = user;
 };
 
-export const createSession = (email: string, password: string) => {
+export const readUser = (userId: string) => {
+  const user = users[userId];
+
+  if (!user) {
+    throw new Error('User does not exist');
+  }
+
+  return user;
+};
+
+export const readUserByEmail = (email: string) => {
   const userEntry = Object.entries(users).find(([, user]) => user.email === email);
 
   if (!userEntry) {
     throw new Error('User does not exist');
   }
 
-  const [userId, user] = userEntry;
-  const hashedPassword = hashPassword(password);
-
-  if (user.hashedPassword !== hashedPassword) {
-    throw new Error(`Incorrect password`);
-  }
-
-  return createSessionToken(userId);
+  const [, user] = userEntry;
+  return user;
 };
 
-export const readUserDetails = (userId: string) => {
+export const updateUser = (userId: string, partialUserDetails: Partial<User>) => {
   const user = users[userId];
 
   if (!user) {
     throw new Error('User does not exist');
   }
 
-  const userDetails: Partial<User> = {
-    id: userId,
-    email: user.email,
-    name: user.name,
+  users[userId] = {
+    ...user,
+    ...partialUserDetails,
   };
-
-  return userDetails;
-};
-
-export const updateUserDetails = (userId: string, name: string) => {
-  const user = users[userId];
-
-  if (!user) {
-    throw new Error('User does not exist');
-  }
-
-  user.name = name;
 };
