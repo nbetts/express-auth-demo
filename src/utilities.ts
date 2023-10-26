@@ -1,7 +1,8 @@
 import { createHash } from 'crypto';
 import { sign, verify } from 'jsonwebtoken';
 
-const signingKey = 'my secret key';
+const tokenExpiresIn = 60; // in seconds
+const tokenSigningKey = 'my secret key';
 
 export const hashPassword = (password: string) => {
   return createHash('sha256').update(password).digest('hex');
@@ -9,11 +10,11 @@ export const hashPassword = (password: string) => {
 
 export const createSessionToken = (userId: string) => {
   const claims = { userId };
-  return sign(claims, signingKey, { expiresIn: 60 });
+  return sign(claims, tokenSigningKey, { expiresIn: tokenExpiresIn });
 };
 
 export const verifySessionToken = (token: string) => {
-  const decodedToken = verify(token, signingKey);
+  const decodedToken = verify(token, tokenSigningKey);
 
   if (typeof decodedToken === 'string') {
     throw new Error('Invalid token');

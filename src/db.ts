@@ -22,7 +22,6 @@ export const createUser = (email: string, password: string) => {
     hashedPassword: hashPassword(password),
     name: '',
   };
-  console.log({ newUser });
 
   users.push(newUser);
 };
