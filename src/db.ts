@@ -2,55 +2,52 @@ import { randomUUID } from 'crypto';
 import { User } from './types';
 import { createSessionToken, hashPassword } from './utilities';
 
-const users: User[] = [{
-  id: '45099f64-68ab-4a0f-a7b7-d9e7af529204',
-  email: 'test@example.com',
-  hashedPassword: '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae',
-  name: 'Nathan',
-}];
+const users: Record<string, User> = {};
 
 export const createUser = (email: string, password: string) => {
-  const existingUser = users.find((user) => user.email === email);
+  const existingUser = Object.entries(users).find(([, user]) => user.email === email);
 
   if (existingUser) {
     throw new Error('User already exists');
   }
 
-  const newUser: User = {
-    id: randomUUID(),
+  const userId = randomUUID();
+  const user: User = {
+    id: userId,
     email,
     hashedPassword: hashPassword(password),
     name: '',
   };
 
-  users.push(newUser);
+  users[userId] = user;
 };
 
 export const createSession = (email: string, password: string) => {
-  const existingUser = users.find((user) => user.email === email);
+  const userEntry = Object.entries(users).find(([, user]) => user.email === email);
 
-  if (!existingUser) {
+  if (!userEntry) {
     throw new Error('User does not exist');
   }
 
+  const [userId, user] = userEntry;
   const hashedPassword = hashPassword(password);
 
-  if (existingUser.hashedPassword !== hashedPassword) {
+  if (user.hashedPassword !== hashedPassword) {
     throw new Error(`Incorrect password`);
   }
 
-  return createSessionToken(existingUser.id);
+  return createSessionToken(userId);
 };
 
-export const readUserDetails = (id: string) => {
-  const user = users.find((user) => user.id === id);
+export const readUserDetails = (userId: string) => {
+  const user = users[userId];
 
   if (!user) {
     throw new Error('User does not exist');
   }
 
   const userDetails: Partial<User> = {
-    id,
+    id: userId,
     email: user.email,
     name: user.name,
   };
@@ -58,12 +55,12 @@ export const readUserDetails = (id: string) => {
   return userDetails;
 };
 
-export const updateUserDetails = (id: string, name: string) => {
-  const userIndex = users.findIndex((user) => user.id === id);
+export const updateUserDetails = (userId: string, name: string) => {
+  const user = users[userId];
 
-  if (userIndex < 0) {
+  if (!user) {
     throw new Error('User does not exist');
   }
 
-  users[userIndex].name = name;
+  user.name = name;
 };

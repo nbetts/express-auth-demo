@@ -74,5 +74,9 @@ export const logIn: RequestHandler = (request, response) => {
 };
 
 export const logOut: RequestHandler = (request, response) => {
-  //
+  // to do
+};
+
+export const refreshSession: RequestHandler = (request, response) => {
+  // to do
 };
