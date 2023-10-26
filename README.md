@@ -7,3 +7,5 @@ This repository is a demonstration of a server using simple bearer authenticatio
 - refresh tokens
 - log out
 - request validation
+- add salt to password hash
+- typescript debugger

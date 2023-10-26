@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import * as db from './db';
-import { verifySessionToken } from './utilities';
+import * as db from '../db';
+import { verifySessionToken } from '../utilities';
 
 const authorizationHeaderPrefix = 'Bearer ';
 
@@ -18,30 +18,6 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
   } catch (error) {
     response.status(401).json({
       error: 'Unauthorized',
-    });
-  }
-};
-
-export const getUser: RequestHandler = (request, response) => {
-  try {
-    const userDetails = db.readUserDetails(request.userId);
-    response.json(userDetails);
-  } catch (error) {
-    response.status(404).json({
-      error: 'User not found',
-    });
-  }
-};
-
-export const updateUser: RequestHandler = (request, response) => {
-  const { name } = request.body;
-
-  try {
-    db.updateUserDetails(request.userId, name);
-    response.end();
-  } catch (error) {
-    response.status(404).json({
-      error: 'User not found',
     });
   }
 };
