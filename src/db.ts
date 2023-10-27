@@ -3,14 +3,13 @@ import { User } from './types';
 const users: Record<string, User> = {};
 
 export const createUser = (user: User) => {
-  const userEntry = Object.entries(users).find(([, existingUser]) => existingUser.email === user.email);
+  const userEntry = Object.values(users).find((existingUser) => existingUser.email === user.email);
 
   if (userEntry) {
     throw new Error('User already exists');
   }
 
   users[user.id] = user;
-  console.log({ users });
 };
 
 export const readUser = (userId: string) => {
@@ -24,13 +23,12 @@ export const readUser = (userId: string) => {
 };
 
 export const readUserByEmail = (email: string) => {
-  const userEntry = Object.entries(users).find(([, existingUser]) => existingUser.email === email);
+  const user = Object.values(users).find((user) => user.email === email);
 
-  if (!userEntry) {
+  if (!user) {
     throw new Error('User does not exist');
   }
 
-  const [, user] = userEntry;
   return user;
 };
 

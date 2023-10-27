@@ -11,3 +11,4 @@ To debug in VSCode, hover over the Debug option that appears next to the scripts
 - refresh tokens
 - log out
 - request validation
+- sql db
