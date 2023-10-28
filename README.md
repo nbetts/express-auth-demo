@@ -9,6 +9,7 @@ To debug in VSCode, hover over the Debug option that appears next to the scripts
 ## To do
 
 - refresh token rotation
-- log out
 - request validation
 - sql db
+- typescript absolute imports (baseUrl and module resolver)
+- esbuild

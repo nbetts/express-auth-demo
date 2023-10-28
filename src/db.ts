@@ -24,6 +24,10 @@ export const readRefreshTokenHash = (userId: string) => {
   return token;
 };
 
+export const deleteRefreshTokenHash = (userId: string) => {
+  delete db.refreshTokenHashes[userId];
+};
+
 export const createUser = (user: User) => {
   const existingEntry = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
 

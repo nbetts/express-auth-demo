@@ -23,6 +23,16 @@ Content-Type: application/json
 
 ###
 
+# @name logOut
+POST http://localhost:3000/logOut
+Content-Type: application/json
+
+{
+  "refreshToken": "{{logIn.response.body.refreshToken}}"
+}
+
+###
+
 # @name refreshSession
 POST http://localhost:3000/refresh
 Content-Type: application/json

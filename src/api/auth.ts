@@ -42,8 +42,25 @@ export const logIn: RequestHandler = (request, response) => {
   }
 };
 
-export const logOut: RequestHandler = (_request, response) => {
-  // to do
+export const logOut: RequestHandler = (request, response) => {
+  const { refreshToken } = request.body;
+
+  try {
+    const userId = verifyJWT(refreshToken);
+    const refreshTokenHash = hash(refreshToken, userId);
+    const storedRefreshTokenHash = db.readRefreshTokenHash(userId);
+
+    if (refreshTokenHash !== storedRefreshTokenHash) {
+      throw new Error('Invalid refresh token');
+    }
+
+    db.deleteRefreshTokenHash(userId);
+    response.end();
+  } catch (error) {
+    response.status(401).json({
+      error: 'Unauthorized',
+    });
+  }
 };
 
 export const refreshSession: RequestHandler = (request, response) => {
