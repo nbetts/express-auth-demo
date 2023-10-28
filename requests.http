@@ -1,4 +1,5 @@
-### Register
+###
+
 # @name register
 POST http://localhost:3000/register
 Content-Type: application/json
@@ -9,7 +10,8 @@ Content-Type: application/json
   "name": "Nathan"
 }
 
-### Log in
+###
+
 # @name logIn
 POST http://localhost:3000/logIn
 Content-Type: application/json
@@ -19,17 +21,29 @@ Content-Type: application/json
   "password": "foo"
 }
 
-### Get user details
+###
+
+# @name refreshSession
+POST http://localhost:3000/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{logIn.response.body.refreshToken}}"
+}
+
+###
+
 # @name getUser
 GET http://localhost:3000/user
 Content-Type: application/json
-Authorization: {{logIn.response.headers.Authorization}}
+Authorization: Bearer {{logIn.response.body.accessToken}}
 
-### Update user details
+###
+
 # @name updateUser
 POST http://localhost:3000/user
 Content-Type: application/json
-Authorization: {{logIn.response.headers.Authorization}}
+Authorization: Bearer {{logIn.response.body.accessToken}}
 
 {
   "name": "Nathan Betts"

@@ -1,6 +1,30 @@
+import { randomUUID } from 'crypto';
 import { RequestHandler } from 'express';
 import * as db from '../db';
 import { User } from '../types';
+import { hash } from '../utilities';
+
+export const register: RequestHandler = (request, response, next) => {
+  const { email, password, name } = request.body;
+
+  try {
+    const userId = randomUUID();
+    const passwordHash = hash(password, userId);
+    const user: User = {
+      id: userId,
+      email,
+      passwordHash,
+      name,
+    };
+
+    db.createUser(user);
+    next();
+  } catch (error) {
+    response.status(409).json({
+      error: 'User already exists',
+    });
+  }
+};
 
 export const getUserDetails: RequestHandler = (request, response) => {
   try {

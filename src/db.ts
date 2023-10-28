@@ -1,23 +1,33 @@
 import { User } from './types';
 
 type Database = {
-  refreshTokens: Record<string, string>;
+  refreshTokenHashes: Record<string, string>;
   users: Record<string, User>;
 };
 
 const db: Database = {
   users: {},
-  refreshTokens: {},
+  refreshTokenHashes: {},
 };
 
-export const createRefreshToken = () => {
+export const createRefreshTokenHash = (userId: string, tokenHash: string) => {
+  db.refreshTokenHashes[userId] = tokenHash; // allow overwriting
+};
 
-}
+export const readRefreshTokenHash = (userId: string) => {
+  const token = db.refreshTokenHashes[userId];
+
+  if (!token) {
+    throw new Error('Refresh token does not exist');
+  }
+
+  return token;
+};
 
 export const createUser = (user: User) => {
-  const userEntry = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
+  const existingEntry = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
 
-  if (userEntry) {
+  if (existingEntry) {
     throw new Error('User already exists');
   }
 

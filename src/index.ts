@@ -8,6 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.post('/register', [api.register, api.logIn]);
 app.post('/logIn', api.logIn);
+app.post('/refresh', api.refreshSession);
 app.get('/user', [api.authenticateUser, api.getUserDetails]);
 app.post('/user', [api.authenticateUser, api.updateUserDetails]);
 

@@ -1,14 +1,18 @@
 import { sign, verify } from 'jsonwebtoken';
+import { hash } from './hashing';
+import * as db from '../db';
 
-const tokenExpiresIn = 60; // in seconds
 const tokenSigningKey = 'my secret key';
+const accessTokenExpiresIn = 60; // in seconds
+const refreshTokenExpiresIn = 60 * 2; // in seconds
 
-export const createAccessToken = (userId: string) => {
+const createJWT = (userId: string, tokenType: 'accessToken' | 'refreshToken') => {
   const claims = { userId };
-  return sign(claims, tokenSigningKey, { expiresIn: tokenExpiresIn });
+  const expiresIn = tokenType === 'accessToken' ? accessTokenExpiresIn : refreshTokenExpiresIn;
+  return sign(claims, tokenSigningKey, { expiresIn });
 };
 
-export const verifyAccessToken = (token: string) => {
+export const verifyJWT = (token: string) => {
   const decodedToken = verify(token, tokenSigningKey);
 
   if (typeof decodedToken === 'string') {
@@ -22,4 +26,16 @@ export const verifyAccessToken = (token: string) => {
   }
 
   return userId;
+};
+
+export const createSessionTokens = (userId: string) => {
+  const accessToken = createJWT(userId, 'accessToken');
+  const refreshToken = createJWT(userId, 'refreshToken');
+  const refreshTokenHash = hash(refreshToken, userId);
+  db.createRefreshTokenHash(userId, refreshTokenHash);
+
+  return {
+    accessToken,
+    refreshToken,
+  };
 };

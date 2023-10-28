@@ -1,8 +1,6 @@
 import { RequestHandler } from 'express';
 import * as db from '../db';
-import { createAccessToken, hash, verifyAccessToken } from '../utilities';
-import { randomUUID } from 'crypto';
-import { User } from '../types';
+import { createSessionTokens, hash, verifyJWT } from '../utilities';
 
 const authorizationHeaderPrefix = 'Bearer ';
 
@@ -15,33 +13,11 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
     }
 
     const accessToken = Authorization.split(authorizationHeaderPrefix)[1];
-    response.locals.userId = verifyAccessToken(accessToken);
+    response.locals.userId = verifyJWT(accessToken);
     next();
   } catch (error) {
     response.status(401).json({
       error: 'Unauthorized',
-    });
-  }
-};
-
-export const register: RequestHandler = (request, response, next) => {
-  const { email, password, name } = request.body;
-
-  try {
-    const userId = randomUUID();
-    const passwordHash = hash(password, userId);
-    const user: User = {
-      id: userId,
-      email,
-      passwordHash,
-      name,
-    };
-
-    db.createUser(user);
-    next();
-  } catch (error) {
-    response.status(409).json({
-      error: 'User already exists',
     });
   }
 };
@@ -57,9 +33,8 @@ export const logIn: RequestHandler = (request, response) => {
       throw new Error(`Incorrect password`);
     }
 
-    const accessToken = createAccessToken(user.id);
-    response.setHeader('Authorization', authorizationHeaderPrefix + accessToken);
-    response.end();
+    const sessionTokens = createSessionTokens(user.id);
+    response.json(sessionTokens);
   } catch (error) {
     response.status(401).json({
       error: 'Incorrect email or password',
@@ -72,5 +47,22 @@ export const logOut: RequestHandler = (_request, response) => {
 };
 
 export const refreshSession: RequestHandler = (request, response) => {
-  // to do
+  const { refreshToken } = request.body;
+
+  try {
+    const userId = verifyJWT(refreshToken);
+    const refreshTokenHash = hash(refreshToken, userId);
+    const storedRefreshTokenHash = db.readRefreshTokenHash(userId);
+
+    if (refreshTokenHash !== storedRefreshTokenHash) {
+      throw new Error('Invalid refresh token');
+    }
+
+    const sessionTokens = createSessionTokens(userId);
+    response.json(sessionTokens);
+  } catch (error) {
+    response.status(401).json({
+      error: 'Unauthorized',
+    });
+  }
 };
