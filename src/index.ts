@@ -12,6 +12,7 @@ app.post('/logOut', api.logOut);
 app.post('/refresh', api.refreshSession);
 app.get('/user', [api.authenticateUser, api.getUserDetails]);
 app.post('/user', [api.authenticateUser, api.updateUserDetails]);
+app.post('/password', [api.authenticateUser, api.updatePassword]);
 
 const port = 3000;
 app.listen(port, () => console.log('Server listening on port', port));

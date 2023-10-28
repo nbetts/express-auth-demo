@@ -5,14 +5,14 @@ import { createSessionTokens, hash, verifyJWT } from '../utilities';
 const authorizationHeaderPrefix = 'Bearer ';
 
 export const authenticateUser: RequestHandler = (request, response, next) => {
-  const Authorization = request.get('Authorization');
+  const authorizationHeader = request.get('Authorization');
 
   try {
-    if (typeof Authorization !== 'string' || !Authorization.startsWith(authorizationHeaderPrefix)) {
+    if (typeof authorizationHeader !== 'string' || !authorizationHeader.startsWith(authorizationHeaderPrefix)) {
       throw new Error('Invalid Authorization header');
     }
 
-    const accessToken = Authorization.split(authorizationHeaderPrefix)[1];
+    const accessToken = authorizationHeader.split(authorizationHeaderPrefix)[1];
     response.locals.userId = verifyJWT(accessToken);
     next();
   } catch (error) {
@@ -27,7 +27,7 @@ export const logIn: RequestHandler = (request, response) => {
 
   try {
     const user = db.readUserByEmail(email);
-    const passwordHash = hash(password, user.id);
+    const passwordHash = hash(password, user.passwordSalt);
 
     if (user.passwordHash !== passwordHash) {
       throw new Error(`Incorrect password`);

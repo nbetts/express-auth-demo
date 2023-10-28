@@ -58,3 +58,15 @@ Authorization: Bearer {{logIn.response.body.accessToken}}
 {
   "name": "Nathan Betts"
 }
+
+###
+
+# @name updatePassword
+POST http://localhost:3000/password
+Content-Type: application/json
+Authorization: Bearer {{logIn.response.body.accessToken}}
+
+{
+  "currentPassword": "foo",
+  "newPassword": "bar"
+}
