@@ -1,19 +1,31 @@
 import { User } from './types';
 
-const users: Record<string, User> = {};
+type Database = {
+  refreshTokens: Record<string, string>;
+  users: Record<string, User>;
+};
+
+const db: Database = {
+  users: {},
+  refreshTokens: {},
+};
+
+export const createRefreshToken = () => {
+
+}
 
 export const createUser = (user: User) => {
-  const userEntry = Object.values(users).find((existingUser) => existingUser.email === user.email);
+  const userEntry = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
 
   if (userEntry) {
     throw new Error('User already exists');
   }
 
-  users[user.id] = user;
+  db.users[user.id] = user;
 };
 
 export const readUser = (userId: string) => {
-  const user = users[userId];
+  const user = db.users[userId];
 
   if (!user) {
     throw new Error('User does not exist');
@@ -23,7 +35,7 @@ export const readUser = (userId: string) => {
 };
 
 export const readUserByEmail = (email: string) => {
-  const user = Object.values(users).find((user) => user.email === email);
+  const user = Object.values(db.users).find((user) => user.email === email);
 
   if (!user) {
     throw new Error('User does not exist');
@@ -33,13 +45,13 @@ export const readUserByEmail = (email: string) => {
 };
 
 export const updateUser = (userId: string, partialUserDetails: Partial<User>) => {
-  const user = users[userId];
+  const user = db.users[userId];
 
   if (!user) {
     throw new Error('User does not exist');
   }
 
-  users[userId] = {
+  db.users[userId] = {
     ...user,
     ...partialUserDetails,
   };

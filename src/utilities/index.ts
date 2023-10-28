@@ -1,2 +1,2 @@
-export * from './passwordHashing';
-export * from './sessionAuth';
+export * from './hashing';
+export * from './auth';

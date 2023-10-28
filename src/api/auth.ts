@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import * as db from '../db';
-import { createSessionToken, createPasswordHash, verifySessionToken } from '../utilities';
+import { createAccessToken, hash, verifyAccessToken } from '../utilities';
 import { randomUUID } from 'crypto';
 import { User } from '../types';
 
@@ -14,8 +14,8 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
       throw new Error('Invalid Authorization header');
     }
 
-    const sessionToken = Authorization.split(authorizationHeaderPrefix)[1];
-    response.locals.userId = verifySessionToken(sessionToken);
+    const accessToken = Authorization.split(authorizationHeaderPrefix)[1];
+    response.locals.userId = verifyAccessToken(accessToken);
     next();
   } catch (error) {
     response.status(401).json({
@@ -29,7 +29,7 @@ export const register: RequestHandler = (request, response, next) => {
 
   try {
     const userId = randomUUID();
-    const passwordHash = createPasswordHash(password, userId);
+    const passwordHash = hash(password, userId);
     const user: User = {
       id: userId,
       email,
@@ -51,14 +51,14 @@ export const logIn: RequestHandler = (request, response) => {
 
   try {
     const user = db.readUserByEmail(email);
-    const passwordHash = createPasswordHash(password, user.id);
+    const passwordHash = hash(password, user.id);
 
     if (user.passwordHash !== passwordHash) {
       throw new Error(`Incorrect password`);
     }
 
-    const sessionToken = createSessionToken(user.id);
-    response.setHeader('Authorization', authorizationHeaderPrefix + sessionToken);
+    const accessToken = createAccessToken(user.id);
+    response.setHeader('Authorization', authorizationHeaderPrefix + accessToken);
     response.end();
   } catch (error) {
     response.status(401).json({
