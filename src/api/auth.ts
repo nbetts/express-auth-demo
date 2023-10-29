@@ -33,8 +33,8 @@ export const createSession: RequestHandler = (request, response) => {
     const sessionTokens = createSessionTokens(userId);
     response.json(sessionTokens);
   } catch (error) {
-    response.status(401).json({
-      error: 'Unauthorized',
+    response.status(400).json({
+      error: 'Missing userId',
     });
   }
 };

@@ -6,13 +6,14 @@ console.log('Server initializing...');
 
 const app = express();
 app.use(bodyParser.json());
-app.post('/register', [api.register, api.logIn, api.createSession]);
-app.post('/logIn', [api.logIn, api.createSession]);
-app.post('/logOut', api.logOut);
-app.post('/refresh', api.refreshSession);
+
+app.post('/session', [api.logIn, api.createSession]);
+app.delete('/session', api.logOut);
+app.put('/session', api.refreshSession);
+app.post('/user', [api.register, api.logIn, api.createSession]);
 app.get('/user', [api.authenticateUser, api.getUserDetails]);
-app.post('/user', [api.authenticateUser, api.updateUserDetails]);
-app.post('/password', [api.authenticateUser, api.updatePassword, api.createSession]);
+app.put('/user', [api.authenticateUser, api.updateUserDetails]);
+app.put('/user/password', [api.authenticateUser, api.updatePassword, api.createSession]);
 
 const port = 3000;
 app.listen(port, () => console.log('Server listening on port', port));

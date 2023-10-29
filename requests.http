@@ -1,19 +1,7 @@
 ###
 
-# @name register
-POST http://localhost:3000/register
-Content-Type: application/json
-
-{
-  "email": "test@example.com",
-  "password": "foo",
-  "name": "Nathan"
-}
-
-###
-
 # @name logIn
-POST http://localhost:3000/logIn
+POST http://localhost:3000/session
 Content-Type: application/json
 
 {
@@ -24,7 +12,7 @@ Content-Type: application/json
 ###
 
 # @name logOut
-POST http://localhost:3000/logOut
+DELETE http://localhost:3000/session
 Content-Type: application/json
 
 {
@@ -34,11 +22,23 @@ Content-Type: application/json
 ###
 
 # @name refreshSession
-POST http://localhost:3000/refresh
+PUT http://localhost:3000/session
 Content-Type: application/json
 
 {
   "refreshToken": "{{logIn.response.body.refreshToken}}"
+}
+
+###
+
+# @name register
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "foo",
+  "name": "Nathan"
 }
 
 ###
@@ -51,7 +51,7 @@ Authorization: Bearer {{logIn.response.body.accessToken}}
 ###
 
 # @name updateUser
-POST http://localhost:3000/user
+PUT http://localhost:3000/user
 Content-Type: application/json
 Authorization: Bearer {{logIn.response.body.accessToken}}
 
@@ -62,7 +62,7 @@ Authorization: Bearer {{logIn.response.body.accessToken}}
 ###
 
 # @name updatePassword
-POST http://localhost:3000/password
+PUT http://localhost:3000/user/password
 Content-Type: application/json
 Authorization: Bearer {{logIn.response.body.accessToken}}
 
