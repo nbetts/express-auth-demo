@@ -20,6 +20,7 @@ export const register: RequestHandler = (request, response, next) => {
     };
 
     db.createUser(user);
+    response.locals.userId = user.id;
     next();
   } catch (error) {
     response.status(409).json({
@@ -72,7 +73,7 @@ export const updatePassword: RequestHandler = (request, response, next) => {
     const passwordHash = hash(currentPassword, user.passwordSalt);
 
     if (user.passwordHash !== passwordHash) {
-      throw new Error(`Incorrect password`);
+      throw new Error('Incorrect password');
     }
 
     const newPasswordSalt = randomUUID();
@@ -83,8 +84,8 @@ export const updatePassword: RequestHandler = (request, response, next) => {
     };
 
     db.updateUser(userId, partialUserDetails);
-    const sessionTokens = createSessionTokens(user.id);
-    response.json(sessionTokens);
+    response.locals.userId = userId;
+    next();
   } catch (error) {
     response.status(401).json({
       error: 'Incorrect password',

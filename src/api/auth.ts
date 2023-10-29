@@ -22,7 +22,24 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
   }
 };
 
-export const logIn: RequestHandler = (request, response) => {
+export const createSession: RequestHandler = (request, response) => {
+  const { userId } = response.locals;
+
+  try {
+    if (!userId) {
+      throw new Error('Missing userId');
+    }
+
+    const sessionTokens = createSessionTokens(userId);
+    response.json(sessionTokens);
+  } catch (error) {
+    response.status(401).json({
+      error: 'Unauthorized',
+    });
+  }
+};
+
+export const logIn: RequestHandler = (request, response, next) => {
   const { email, password } = request.body;
 
   try {
@@ -30,11 +47,11 @@ export const logIn: RequestHandler = (request, response) => {
     const passwordHash = hash(password, user.passwordSalt);
 
     if (user.passwordHash !== passwordHash) {
-      throw new Error(`Incorrect password`);
+      throw new Error('Incorrect password');
     }
 
-    const sessionTokens = createSessionTokens(user.id);
-    response.json(sessionTokens);
+    response.locals.userId = user.id;
+    next();
   } catch (error) {
     response.status(401).json({
       error: 'Incorrect email or password',
@@ -63,7 +80,7 @@ export const logOut: RequestHandler = (request, response) => {
   }
 };
 
-export const refreshSession: RequestHandler = (request, response) => {
+export const refreshSession: RequestHandler = (request, response, next) => {
   const { refreshToken } = request.body;
 
   try {
@@ -75,8 +92,7 @@ export const refreshSession: RequestHandler = (request, response) => {
       throw new Error('Invalid refresh token');
     }
 
-    const sessionTokens = createSessionTokens(userId);
-    response.json(sessionTokens);
+    next();
   } catch (error) {
     response.status(401).json({
       error: 'Unauthorized',
