@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { RequestHandler } from 'express';
-import * as db from '../db';
+import * as db from '../database';
 import { User } from '../types';
 import { createSessionTokens, hash } from '../utilities';
 
