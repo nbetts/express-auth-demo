@@ -9,5 +9,4 @@ To debug in VSCode, hover over the Debug option that appears next to the scripts
 ## To do
 
 - refresh token rotation
-- request validation
 - session cookies

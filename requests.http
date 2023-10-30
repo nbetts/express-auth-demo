@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "foo"
+  "password": "Password123!"
 }
 
 ###
@@ -37,7 +37,7 @@ Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "foo",
+  "password": "Password123!",
   "name": "Nathan"
 }
 
@@ -67,6 +67,6 @@ Content-Type: application/json
 Authorization: Bearer {{logIn.response.body.accessToken}}
 
 {
-  "currentPassword": "foo",
-  "newPassword": "bar"
+  "currentPassword": "Password123!",
+  "newPassword": "AnotherPassword123!"
 }

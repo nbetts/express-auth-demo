@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { RequestHandler } from 'express';
 import * as db from '../database';
 import { User } from '../types';
-import { createSessionTokens, hash } from '../utilities';
+import { hash } from '../utilities';
 
 export const register: RequestHandler = (request, response, next) => {
   const { email, password, name } = request.body;
@@ -16,7 +16,7 @@ export const register: RequestHandler = (request, response, next) => {
       email,
       passwordHash,
       passwordSalt,
-      name,
+      name: name.trim(),
     };
 
     db.createUser(user);
@@ -51,7 +51,7 @@ export const updateUserDetails: RequestHandler = (request, response) => {
   const { userId } = response.locals;
   const { name } = request.body;
   const partialUserDetails: Partial<User> = {
-    name,
+    name: name.trim(),
   };
 
   try {

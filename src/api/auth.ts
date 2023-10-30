@@ -92,6 +92,7 @@ export const refreshSession: RequestHandler = (request, response, next) => {
       throw new Error('Invalid refresh token');
     }
 
+    response.locals.userId = userId;
     next();
   } catch (error) {
     response.status(401).json({
