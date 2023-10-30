@@ -1,10 +1,13 @@
 import { RequestHandler } from 'express';
+import { randomUUID } from 'crypto';
 import * as db from '../database';
-import { createSessionTokens, verifyJWT } from '../utilities/auth';
+import { createJWT, verifyJWT } from '../utilities/auth';
 import { hash } from '../utilities/hashing';
 import { SessionEntry } from '../database/types';
 
 const authorizationHeaderPrefix = 'Bearer ';
+const accessTokenExpiresInSeconds = 60;
+const refreshTokenExpiresInSeconds = 60 * 2;
 
 export const authenticateUser: RequestHandler = (request, response, next) => {
   const authorizationHeader = request.get('Authorization');
@@ -36,8 +39,19 @@ export const createSession: RequestHandler = (request, response) => {
       db.deleteAllSessionsByUserId(userId);
     }
 
-    const sessionTokens = createSessionTokens(userId);
-    response.json(sessionTokens);
+    const accessToken = createJWT(userId, accessTokenExpiresInSeconds);
+    const refreshToken = createJWT(userId, refreshTokenExpiresInSeconds);
+    const sessionId = randomUUID();
+
+    const session: SessionEntry = {
+      id: sessionId,
+      userId,
+      refreshTokenHash: hash(refreshToken, userId),
+      active: true,
+    };
+
+    db.createSession(session);
+    response.json({ accessToken, refreshToken });
   } catch (error) {
     response.status(400).json({
       error: 'Missing userId',
