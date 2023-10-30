@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { RequestHandler } from 'express';
 import * as db from '../database';
 import { UserEntry } from '../database/types';
-import { hash } from '../utilities';
+import { hash } from '../utilities/hashing';
 
 export const register: RequestHandler = (request, response, next) => {
   const { email, password, name } = request.body;

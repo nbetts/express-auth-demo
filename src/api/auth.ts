@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import * as db from '../database';
-import { createSessionTokens, hash, verifyJWT } from '../utilities';
+import { createSessionTokens, verifyJWT } from '../utilities/auth';
+import { hash } from '../utilities/hashing';
 import { SessionEntry } from '../database/types';
 
 const authorizationHeaderPrefix = 'Bearer ';
