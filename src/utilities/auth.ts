@@ -1,6 +1,8 @@
 import { sign, verify } from 'jsonwebtoken';
 import { hash } from './hashing';
 import * as db from '../database';
+import { SessionEntry } from '../database/types';
+import { randomUUID } from 'crypto';
 
 const tokenSigningKey = 'my secret key';
 const accessTokenExpiresInSeconds = 60;
@@ -30,8 +32,16 @@ export const verifyJWT = (token: string) => {
 export const createSessionTokens = (userId: string) => {
   const accessToken = createJWT(userId, accessTokenExpiresInSeconds);
   const refreshToken = createJWT(userId, refreshTokenExpiresInSeconds);
-  const refreshTokenHash = hash(refreshToken, userId);
-  db.createRefreshTokenHash(userId, refreshTokenHash);
+  const sessionId = randomUUID();
+
+  const session: SessionEntry = {
+    id: sessionId,
+    userId,
+    refreshTokenHash: hash(refreshToken, userId),
+    active: true,
+  };
+
+  db.createSession(session);
 
   return {
     accessToken,

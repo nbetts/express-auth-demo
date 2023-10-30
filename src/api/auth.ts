@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import * as db from '../database';
 import { createSessionTokens, hash, verifyJWT } from '../utilities';
+import { SessionEntry } from '../database/types';
 
 const authorizationHeaderPrefix = 'Bearer ';
 
@@ -28,6 +29,10 @@ export const createSession: RequestHandler = (request, response) => {
   try {
     if (!userId) {
       throw new Error('Missing userId');
+    }
+
+    if (response.locals.deleteExistingSessions) {
+      db.deleteAllSessionsByUserId(userId);
     }
 
     const sessionTokens = createSessionTokens(userId);
@@ -65,13 +70,18 @@ export const logOut: RequestHandler = (request, response) => {
   try {
     const userId = verifyJWT(refreshToken);
     const refreshTokenHash = hash(refreshToken, userId);
-    const storedRefreshTokenHash = db.readRefreshTokenHash(userId);
+    const session = db.readSessionByRefreshTokenHash(refreshTokenHash);
 
-    if (refreshTokenHash !== storedRefreshTokenHash) {
+    if (!session.active) {
+      db.deleteAllSessionsByUserId(userId);
+      throw new Error('Compromised refresh token');
+    }
+
+    if (!session) {
       throw new Error('Invalid refresh token');
     }
 
-    db.deleteRefreshTokenHash(userId);
+    db.deleteSession(session.id);
     response.end();
   } catch (error) {
     response.status(401).json({
@@ -86,12 +96,22 @@ export const refreshSession: RequestHandler = (request, response, next) => {
   try {
     const userId = verifyJWT(refreshToken);
     const refreshTokenHash = hash(refreshToken, userId);
-    const storedRefreshTokenHash = db.readRefreshTokenHash(userId);
+    const session = db.readSessionByRefreshTokenHash(refreshTokenHash);
 
-    if (refreshTokenHash !== storedRefreshTokenHash) {
+    if (!session.active) {
+      db.deleteAllSessionsByUserId(userId);
+      throw new Error('Compromised refresh token');
+    }
+
+    if (!session) {
       throw new Error('Invalid refresh token');
     }
 
+    const partialSessionDetails: Partial<SessionEntry> = {
+      active: false,
+    };
+
+    db.updateSession(session.id, partialSessionDetails);
     response.locals.userId = userId;
     next();
   } catch (error) {

@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { RequestHandler } from 'express';
 import * as db from '../database';
-import { User } from '../types';
+import { UserEntry } from '../database/types';
 import { hash } from '../utilities';
 
 export const register: RequestHandler = (request, response, next) => {
@@ -11,7 +11,7 @@ export const register: RequestHandler = (request, response, next) => {
     const userId = randomUUID();
     const passwordSalt = randomUUID();
     const passwordHash = hash(password, passwordSalt);
-    const user: User = {
+    const user: UserEntry = {
       id: userId,
       email,
       passwordHash,
@@ -34,7 +34,7 @@ export const getUserDetails: RequestHandler = (request, response) => {
 
   try {
     const user = db.readUser(userId);
-    const partialUserDetails: Partial<User> = {
+    const partialUserDetails: Partial<UserEntry> = {
       id: user.id,
       email: user.email,
       name: user.name,
@@ -50,7 +50,7 @@ export const getUserDetails: RequestHandler = (request, response) => {
 export const updateUserDetails: RequestHandler = (request, response) => {
   const { userId } = response.locals;
   const { name } = request.body;
-  const partialUserDetails: Partial<User> = {
+  const partialUserDetails: Partial<UserEntry> = {
     name: name.trim(),
   };
 
@@ -78,13 +78,14 @@ export const updatePassword: RequestHandler = (request, response, next) => {
 
     const newPasswordSalt = randomUUID();
     const newPasswordHash = hash(newPassword, newPasswordSalt);
-    const partialUserDetails: Partial<User> = {
+    const partialUserDetails: Partial<UserEntry> = {
       passwordHash: newPasswordHash,
       passwordSalt: newPasswordSalt,
     };
 
     db.updateUser(userId, partialUserDetails);
     response.locals.userId = userId;
+    response.locals.deleteExistingSessions = true;
     next();
   } catch (error) {
     response.status(401).json({
