@@ -2,11 +2,10 @@
   "name": "learning-auth",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "rm -rf dist && tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
   },
   "keywords": [],
   "author": "",
