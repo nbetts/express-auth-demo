@@ -27,16 +27,16 @@ export const passwordSchema: ParamSchema = {
 
 export const nameSchema: ParamSchema = {
   trim: true,
-  isAlpha: {
-    options: 'en-GB',
-    errorMessage: 'Must only contain letters',
-  },
   isLength: {
     options: {
       min: 2,
       max: 32,
     },
     errorMessage: 'Must be 2-32 characters long',
+  },
+  isAlpha: {
+    options: 'en-GB',
+    errorMessage: 'Must only contain letters',
   },
 };
 

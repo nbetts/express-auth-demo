@@ -28,35 +28,29 @@ export const authenticateUser: RequestHandler = (request, response, next) => {
 };
 
 export const createSession: RequestHandler = (request, response) => {
-  const { userId } = response.locals;
+  const { userId, deleteExistingSessions } = response.locals;
 
-  try {
-    if (!userId) {
-      throw new Error('Missing userId');
-    }
-
-    if (response.locals.deleteExistingSessions) {
-      db.deleteAllSessionsByUserId(userId);
-    }
-
-    const accessToken = createJWT(userId, accessTokenExpiresInSeconds);
-    const refreshToken = createJWT(userId, refreshTokenExpiresInSeconds);
-    const sessionId = randomUUID();
-
-    const session: SessionEntry = {
-      id: sessionId,
-      userId,
-      refreshTokenHash: hash(refreshToken, userId),
-      active: true,
-    };
-
-    db.createSession(session);
-    response.json({ accessToken, refreshToken });
-  } catch (error) {
-    response.status(400).json({
-      error: 'Missing userId',
-    });
+  if (!userId) {
+    throw new Error('Missing userId');
   }
+
+  if (deleteExistingSessions) {
+    db.deleteAllSessionsByUserId(userId);
+  }
+
+  const accessToken = createJWT(userId, accessTokenExpiresInSeconds);
+  const refreshToken = createJWT(userId, refreshTokenExpiresInSeconds);
+  const sessionId = randomUUID();
+
+  const session: SessionEntry = {
+    id: sessionId,
+    userId,
+    refreshTokenHash: hash(refreshToken, userId),
+    active: true,
+  };
+
+  db.createSession(session);
+  response.json({ accessToken, refreshToken });
 };
 
 export const logIn: RequestHandler = (request, response, next) => {

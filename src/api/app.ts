@@ -7,6 +7,7 @@ import * as validators from '../validation/validators';
 
 export const app = express();
 
+app.disable('x-powered-by');
 app.use(bodyParser.json());
 app.post('/session', validators.logInValidator, [validateRequest, authApi.logIn, authApi.createSession]);
 app.delete('/session', validators.logOutValidator, [validateRequest, authApi.logOut]);
