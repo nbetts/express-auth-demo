@@ -61,10 +61,16 @@ export const deleteAllSessionsByUserId = (userId: string) => {
 };
 
 export const createUser = (user: UserEntry) => {
-  const entry = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
+  const entryById = db.users[user.id];
 
-  if (entry) {
-    throw new Error('User already exists');
+  if (entryById) {
+    throw new Error('User with ID already exists');
+  }
+
+  const entryByEmail = Object.values(db.users).find((existingUser) => existingUser.email === user.email);
+
+  if (entryByEmail) {
+    throw new Error('User with email already exists');
   }
 
   db.users[user.id] = user;
