@@ -8,10 +8,16 @@ export const createJWT = (userId: string, expiresIn: number) => {
 };
 
 export const verifyJWT = (token: string) => {
-  const decodedToken = verify(token, tokenSigningKey);
+  let decodedToken;
+
+  try {
+    decodedToken = verify(token, tokenSigningKey);
+  } catch (error) {
+    throw new Error('Invalid JWT');
+  }
 
   if (typeof decodedToken === 'string') {
-    throw new Error('Invalid token');
+    throw new Error('Invalid payload');
   }
 
   const { userId } = decodedToken;
