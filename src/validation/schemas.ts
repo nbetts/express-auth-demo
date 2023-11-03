@@ -35,7 +35,7 @@ export const nameSchema: ParamSchema = {
     errorMessage: 'Must be 2-32 characters long',
   },
   isAlpha: {
-    options: 'en-GB',
+    options: ['en-GB', { ignore: ' ' }],
     errorMessage: 'Must only contain letters',
   },
 };
