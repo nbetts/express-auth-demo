@@ -1,10 +1,10 @@
 import { hash } from "../../../src/utilities/hashing";
 
 describe('hashing utilities', () => {
-  it('hashes a password using sha256 and hex, with a given salt and pepper', () => {
-    const password = 'password';
+  it('returns a hashed input using sha256 and hex, with a given salt and pepper', () => {
+    const input = 'hello';
     const salt = 'salt';
-    const passwordHash = hash(password, salt);
-    expect (passwordHash).toEqual('4109a67341ecfe9b74344344d2274ec5a827436db56992c44948f9a27896c4f4');
+    const inputHash = hash(input, salt);
+    expect (inputHash).toEqual('2d405fc47b85b8d89d76bab131697949508b71e92a727c9ef4fb2821c59c1228');
   });
 });
