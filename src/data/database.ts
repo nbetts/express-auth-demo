@@ -1,8 +1,12 @@
 import { Database, SessionEntry, UserEntry } from './types';
 
-const db: Database = {
+let db: Database = {
   sessions: {},
   users: {},
+};
+
+export const createDatabase = (database: Database) => {
+  db = database;
 };
 
 export const createSession = (session: SessionEntry) => {

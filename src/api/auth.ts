@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
 import { randomUUID } from 'crypto';
-import * as db from '../database';
+import * as db from '../data/database';
 import { createJWT, verifyJWT } from '../utilities/auth';
 import { hash } from '../utilities/hashing';
-import { SessionEntry } from '../database/types';
+import { SessionEntry } from '../data/types';
 
 const authorizationHeaderPrefix = 'Bearer ';
 const accessTokenExpiresInSeconds = 60;
