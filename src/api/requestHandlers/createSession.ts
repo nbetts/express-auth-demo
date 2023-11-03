@@ -1,8 +1,7 @@
 import { RequestHandler } from 'express';
 import { randomUUID } from 'crypto';
 import * as db from '../../data/database';
-import { createJWT } from '../../utilities/auth';
-import { hash } from '../../utilities/hashing';
+import { createJWT, hash } from '../../utilities/auth';
 import { SessionEntry } from '../../data/types';
 
 const accessTokenExpiresInSeconds = 60;

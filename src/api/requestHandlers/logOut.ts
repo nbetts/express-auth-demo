@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import * as db from '../../data/database';
-import { verifyJWT } from '../../utilities/auth';
-import { hash } from '../../utilities/hashing';
+import { hash, verifyJWT } from '../../utilities/auth';
 
 export const logOut: RequestHandler = (request, response) => {
   const { refreshToken } = request.body;

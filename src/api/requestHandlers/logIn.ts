@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import * as db from '../../data/database';
-import { hash } from '../../utilities/hashing';
+import { hash } from '../../utilities/auth';
 
 export const logIn: RequestHandler = (request, response, next) => {
   const { email, password } = request.body;

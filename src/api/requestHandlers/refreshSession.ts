@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import * as db from '../../data/database';
-import { verifyJWT } from '../../utilities/auth';
-import { hash } from '../../utilities/hashing';
+import { hash, verifyJWT } from '../../utilities/auth';
 import { SessionEntry } from '../../data/types';
 
 export const refreshSession: RequestHandler = (request, response, next) => {

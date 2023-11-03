@@ -1,17 +1,24 @@
+import { createHash } from 'crypto';
 import { sign, verify } from 'jsonwebtoken';
 
-const tokenSigningKey = 'my secret key';
+const hashPepper = 'my secret pepper';
+const jwtSigningKey = 'my secret key';
+
+export const hash = (input: string, salt: string) => {
+  const combinedInput = input + salt + hashPepper;
+  return createHash('sha256').update(combinedInput).digest('hex');
+};
 
 export const createJWT = (userId: string, expiresIn: number) => {
   const claims = { userId };
-  return sign(claims, tokenSigningKey, { expiresIn });
+  return sign(claims, jwtSigningKey, { expiresIn });
 };
 
 export const verifyJWT = (token: string) => {
   let decodedToken;
 
   try {
-    decodedToken = verify(token, tokenSigningKey);
+    decodedToken = verify(token, jwtSigningKey);
   } catch (error) {
     throw new Error('Invalid JWT');
   }
