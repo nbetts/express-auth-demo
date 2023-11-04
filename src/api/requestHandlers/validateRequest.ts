@@ -7,7 +7,7 @@ export const validateRequest: RequestHandler = (request, response, next) => {
   if (validation.isEmpty()) {
     next();
   } else {
-    response.status(400).send({
+    response.status(400).json({
       errors: validation.formatWith(error => error.msg).mapped(),
     });
   }
