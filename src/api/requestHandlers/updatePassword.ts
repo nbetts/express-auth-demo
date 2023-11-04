@@ -24,7 +24,6 @@ export const updatePassword: RequestHandler = (request, response, next) => {
     };
 
     db.updateUser(userId, partialUserDetails);
-    response.locals.userId = userId;
     response.locals.deleteExistingSessions = true;
     next();
   } catch (error) {

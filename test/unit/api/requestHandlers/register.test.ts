@@ -61,6 +61,7 @@ describe('register', () => {
     register(request, response, nextMock);
 
     expect(response.statusCode).toEqual(409);
+    expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'User with email already exists',
     });

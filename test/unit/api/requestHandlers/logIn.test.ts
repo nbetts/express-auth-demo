@@ -46,6 +46,7 @@ describe('logIn', () => {
     logIn(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
+    expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'Incorrect email or password',
     });
@@ -75,6 +76,7 @@ describe('logIn', () => {
     logIn(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
+    expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'Incorrect email or password',
     });
