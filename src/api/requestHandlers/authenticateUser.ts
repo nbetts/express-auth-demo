@@ -6,11 +6,14 @@ const authorizationHeaderPrefix = 'Bearer ';
 export const authenticateUser: RequestHandler = (request, response, next) => {
   const authorizationHeader = request.get('Authorization');
 
-  try {
-    if (typeof authorizationHeader !== 'string' || !authorizationHeader.startsWith(authorizationHeaderPrefix)) {
-      throw new Error('Invalid Authorization header');
-    }
+  if (!authorizationHeader?.startsWith(authorizationHeaderPrefix)) {
+    response.status(401).json({
+      error: 'Authorization header missing Bearer schema',
+    });
+    return;
+  }
 
+  try {
     const accessToken = authorizationHeader.split(authorizationHeaderPrefix)[1];
     response.locals.userId = verifyJWT(accessToken);
     next();

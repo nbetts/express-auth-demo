@@ -36,7 +36,7 @@ export const nameSchema: ParamSchema = {
   },
   isAlpha: {
     options: ['en-GB', { ignore: ' ' }],
-    errorMessage: 'Must only contain letters',
+    errorMessage: 'Must only contain letters and spaces',
   },
 };
 
