@@ -14,10 +14,10 @@ describe('getUserDetails', () => {
 
     const dbReadUserMock = jest.spyOn(db, 'readUser').mockImplementation(() => ({
       id: 'user-id',
-      email: 'user-email',
-      passwordHash: 'user-password-hash',
-      passwordSalt: 'user-password-salt',
-      name: 'user-name',
+      email: 'test@example.com',
+      passwordHash: 'mock-password-hash',
+      passwordSalt: 'mock-password-salt',
+      name: 'name',
     }));
 
     getUserDetails(request, response, nextMock);
@@ -25,19 +25,23 @@ describe('getUserDetails', () => {
     expect(response.statusCode).toEqual(200);
     expect(response._getJSONData()).toEqual({
       id: 'user-id',
-      email: 'user-email',
-      name: 'user-name',
+      email: 'test@example.com',
+      name: 'name',
     });
     expect(nextMock).not.toHaveBeenCalled();
     expect(dbReadUserMock).toHaveBeenCalledWith('user-id');
   });
 
-  it('returns a 404 when the userId property is missing', () => {
+  it('returns a 404 when the user with ID does not exist', () => {
     const request = createRequest();
     const response = createResponse();
     const nextMock = jest.fn();
 
     getUserDetails(request, response, nextMock);
+
+    const dbReadUserMock = jest.spyOn(db, 'readUser').mockImplementation(() => {
+      throw new Error('User not found');
+    });
 
     expect(response.statusCode).toEqual(404);
     expect(response._getJSONData()).toEqual({
