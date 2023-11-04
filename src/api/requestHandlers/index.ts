@@ -1,4 +1,5 @@
 export * from './authenticateAccess';
+export * from './authenticateRefresh';
 export * from './createSession';
 export * from './getUserDetails';
 export * from './logIn';
