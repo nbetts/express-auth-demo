@@ -3,37 +3,38 @@ import { createRequest, createResponse } from 'node-mocks-http';
 import * as authUtilities from "../../../../src/utilities/auth";
 
 describe('authenticateUser', () => {
-  it('returns a 200 when the access token is valid', () => {
+  it('returns a 200 when the request is valid', () => {
     const request = createRequest({
       headers: {
         authorization: 'Bearer mock-access-token',
       },
     });
     const response = createResponse();
-    const nextFunction = jest.fn();
+    const nextMock = jest.fn();
+
     jest.spyOn(authUtilities, 'verifyJWT').mockReturnValueOnce('user-id');
 
-    authenticateUser(request, response, nextFunction);
+    authenticateUser(request, response, nextMock);
 
     expect(response.statusCode).toEqual(200);
     expect(response.locals.userId).toEqual('user-id');
     expect(response._isJSON()).toEqual(false);
-    expect(nextFunction).toHaveBeenCalled();
+    expect(nextMock).toHaveBeenCalled();
   });
 
   it('returns a 401 when the Authorization header is empty', () => {
     const request = createRequest();
     const response = createResponse();
-    const nextFunction = jest.fn();
+    const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextFunction);
+    authenticateUser(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'Authorization header missing Bearer schema',
     });
-    expect(nextFunction).not.toHaveBeenCalled();
+    expect(nextMock).not.toHaveBeenCalled();
   });
 
   it('returns a 401 when the Authorization header is missing the Bearer schema', () => {
@@ -43,16 +44,16 @@ describe('authenticateUser', () => {
       },
     });
     const response = createResponse();
-    const nextFunction = jest.fn();
+    const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextFunction);
+    authenticateUser(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'Authorization header missing Bearer schema',
     });
-    expect(nextFunction).not.toHaveBeenCalled();
+    expect(nextMock).not.toHaveBeenCalled();
   });
 
   it('returns a 401 when the access token is invalid', () => {
@@ -62,15 +63,15 @@ describe('authenticateUser', () => {
       },
     });
     const response = createResponse();
-    const nextFunction = jest.fn();
+    const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextFunction);
+    authenticateUser(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();
     expect(response._getJSONData()).toEqual({
       error: 'Unauthorized',
     });
-    expect(nextFunction).not.toHaveBeenCalled();
+    expect(nextMock).not.toHaveBeenCalled();
   });
 });

@@ -16,7 +16,7 @@ describe('auth utilities', () => {
   });
 
   describe('createJWT', () => {
-    it('creates a JWT with a given userId as a claim, and expiry time', () => {
+    it('creates a JWT with a given userId claim, and expiry time', () => {
       const userId = 'user-id';
       const jwt = createJWT(userId, 1);
       expect(jwt).toEqual('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWlkIiwiaWF0IjowLCJleHAiOjF9.p7TVokBoWOCkYINGD6eBcbBnsQVnyQG8sYl47U6SYOI');
