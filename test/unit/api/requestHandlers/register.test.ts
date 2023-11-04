@@ -5,7 +5,7 @@ import * as authUtilities from "../../../../src/utilities/auth";
 import * as db from "../../../../src/data/database";
 
 describe('register', () => {
-  it('returns a 201 when the request is valid and trims name property', () => {
+  it('returns a 201 when the request is valid and trims the name property', () => {
     const request = createRequest({
       body: {
         email: 'test@example.com',

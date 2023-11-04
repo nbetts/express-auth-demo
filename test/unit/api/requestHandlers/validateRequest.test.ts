@@ -1,6 +1,6 @@
 import { validateRequest } from "../../../../src/api/requestHandlers";
 import { createRequest, createResponse } from 'node-mocks-http';
-import expressValidator, { checkSchema } from "express-validator";
+import { checkSchema } from "express-validator";
 
 describe('validateRequest', () => {
   it('returns a 200 when the request is valid', async () => {

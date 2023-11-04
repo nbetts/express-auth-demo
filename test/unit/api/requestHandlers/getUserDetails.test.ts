@@ -37,11 +37,11 @@ describe('getUserDetails', () => {
     const response = createResponse();
     const nextMock = jest.fn();
 
-    getUserDetails(request, response, nextMock);
-
     jest.spyOn(db, 'readUser').mockImplementationOnce(() => {
       throw new Error('User not found');
     });
+
+    getUserDetails(request, response, nextMock);
 
     expect(response.statusCode).toEqual(404);
     expect(response._getJSONData()).toEqual({

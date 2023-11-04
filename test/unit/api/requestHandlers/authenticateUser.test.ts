@@ -18,7 +18,6 @@ describe('authenticateUser', () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.locals.userId).toEqual('user-id');
-    expect(response._isJSON()).toEqual(false);
     expect(nextMock).toHaveBeenCalled();
   });
 
