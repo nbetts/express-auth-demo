@@ -11,6 +11,6 @@ app.post('/session', validators.logInValidator, [api.validateRequest, api.logIn,
 app.delete('/session', validators.logOutValidator, [api.validateRequest, api.logOut]);
 app.put('/session', validators.refreshSessionValidator, [api.validateRequest, api.refreshSession, api.createSession]);
 app.post('/user', validators.registerValidator, [api.validateRequest, api.register, api.logIn, api.createSession]);
-app.get('/user', [api.authenticateUser, api.getUserDetails]);
-app.put('/user', validators.updateUserValidator, [api.validateRequest, api.authenticateUser, api.updateUserDetails]);
-app.put('/user/password', validators.updatePasswordValidator, [api.validateRequest, api.authenticateUser, api.updatePassword, api.createSession]);
+app.get('/user', [api.authenticateAccess, api.getUserDetails]);
+app.put('/user', validators.updateUserValidator, [api.validateRequest, api.authenticateAccess, api.updateUserDetails]);
+app.put('/user/password', validators.updatePasswordValidator, [api.validateRequest, api.authenticateAccess, api.updatePassword, api.createSession]);

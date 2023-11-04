@@ -1,8 +1,8 @@
-import { authenticateUser } from "../../../../src/api/requestHandlers";
+import { authenticateAccess } from "../../../../src/api/requestHandlers";
 import { createRequest, createResponse } from 'node-mocks-http';
 import * as authUtilities from "../../../../src/utilities/auth";
 
-describe('authenticateUser', () => {
+describe('authenticateAccess', () => {
   it('returns a 200 when the request is valid', () => {
     const request = createRequest({
       headers: {
@@ -14,7 +14,7 @@ describe('authenticateUser', () => {
 
     jest.spyOn(authUtilities, 'verifyJWT').mockReturnValueOnce('user-id');
 
-    authenticateUser(request, response, nextMock);
+    authenticateAccess(request, response, nextMock);
 
     expect(response.statusCode).toEqual(200);
     expect(response.locals.userId).toEqual('user-id');
@@ -26,7 +26,7 @@ describe('authenticateUser', () => {
     const response = createResponse();
     const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextMock);
+    authenticateAccess(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();
@@ -45,7 +45,7 @@ describe('authenticateUser', () => {
     const response = createResponse();
     const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextMock);
+    authenticateAccess(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();
@@ -64,7 +64,7 @@ describe('authenticateUser', () => {
     const response = createResponse();
     const nextMock = jest.fn();
 
-    authenticateUser(request, response, nextMock);
+    authenticateAccess(request, response, nextMock);
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.userId).toBeUndefined();

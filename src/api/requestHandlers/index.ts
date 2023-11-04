@@ -1,4 +1,4 @@
-export * from './authenticateUser';
+export * from './authenticateAccess';
 export * from './createSession';
 export * from './getUserDetails';
 export * from './logIn';

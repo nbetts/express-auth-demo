@@ -3,7 +3,7 @@ import { verifyJWT } from '../../utilities/auth';
 
 const authorizationHeaderPrefix = 'Bearer ';
 
-export const authenticateUser: RequestHandler = (request, response, next) => {
+export const authenticateAccess: RequestHandler = (request, response, next) => {
   const authorizationHeader = request.get('Authorization');
 
   if (!authorizationHeader?.startsWith(authorizationHeaderPrefix)) {
