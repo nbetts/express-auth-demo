@@ -6,7 +6,13 @@ export const logIn: RequestHandler = (request, response, next) => {
   const { email, password } = request.body;
 
   try {
-    const user = db.readUserByEmail(email);
+    const usersWithEmail = db.queryUsersByEmail(email);
+
+    if (usersWithEmail.length < 1) {
+      throw new Error('User with email does not exist');
+    }
+
+    const user = usersWithEmail[0];
     const passwordHash = hash(password, user.passwordSalt);
 
     if (user.passwordHash !== passwordHash) {

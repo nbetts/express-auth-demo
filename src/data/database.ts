@@ -86,14 +86,8 @@ export const readUser = (userId: string) => {
   return entry;
 };
 
-export const readUserByEmail = (email: string) => {
-  const entry = Object.values(db.users).find((user) => user.email === email);
-
-  if (!entry) {
-    throw new Error('User does not exist');
-  }
-
-  return entry;
+export const queryUsersByEmail = (email: string) => {
+  return Object.values(db.users).filter((user) => user.email === email);
 };
 
 export const updateUser = (userId: string, partialUserDetails: Partial<UserEntry>) => {

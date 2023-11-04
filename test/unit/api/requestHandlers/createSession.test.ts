@@ -20,8 +20,8 @@ describe('createSession', () => {
     jest.spyOn(authUtilities, 'hash').mockReturnValueOnce('mock-refresh-token-hash');
     jest.spyOn(crypto, 'randomUUID').mockReturnValueOnce('1-2-3-4-5');
 
-    const dbDeleteAllSessionsByUserIdMock = jest.spyOn(db, 'deleteAllSessionsByUserId').mockImplementation();
-    const dbCreateSessionMock = jest.spyOn(db, 'createSession').mockImplementation();
+    const dbDeleteAllSessionsByUserIdMock = jest.spyOn(db, 'deleteAllSessionsByUserId').mockReturnValueOnce();
+    const dbCreateSessionMock = jest.spyOn(db, 'createSession').mockReturnValueOnce();
 
     createSession(request, response, nextMock);
 
@@ -56,8 +56,8 @@ describe('createSession', () => {
     jest.spyOn(authUtilities, 'hash').mockReturnValueOnce('mock-refresh-token-hash');
     jest.spyOn(crypto, 'randomUUID').mockReturnValueOnce('1-2-3-4-5');
 
-    const dbDeleteAllSessionsByUserIdMock = jest.spyOn(db, 'deleteAllSessionsByUserId').mockImplementation();
-    const dbCreateSessionMock = jest.spyOn(db, 'createSession').mockImplementation();
+    const dbDeleteAllSessionsByUserIdMock = jest.spyOn(db, 'deleteAllSessionsByUserId').mockReturnValueOnce();
+    const dbCreateSessionMock = jest.spyOn(db, 'createSession').mockReturnValueOnce();
 
     createSession(request, response, nextMock);
 

@@ -348,8 +348,8 @@ describe('database', () => {
     });
   });
 
-  describe('readUserByEmail', () => {
-    it('reads a user entry by email', () => {
+  describe('queryUsersByEmail', () => {
+    it('reads a list of user entries by email', () => {
       const user: UserEntry = {
         id: 'user-id',
         email: 'test@example.com',
@@ -365,31 +365,9 @@ describe('database', () => {
       };
 
       db.createDatabase(mockDb);
-      const entry = db.readUserByEmail(user.email);
+      const entries = db.queryUsersByEmail(user.email);
 
-      expect(entry).toEqual(user);
-      expect(Object.keys(mockDb.users)).toEqual([user.id]);
-      expect(mockDb.users[user.id]).toEqual(user);
-    });
-
-    it('throws an error when an entry with user email does not exist', () => {
-      const user: UserEntry = {
-        id: 'user-id',
-        email: 'test@example.com',
-        passwordHash: 'password-hash',
-        passwordSalt: 'password-salt',
-        name: 'name',
-      };
-      const mockDb: Database = {
-        sessions: {},
-        users: {
-          [user.id]: user,
-        },
-      };
-
-      db.createDatabase(mockDb);
-
-      expect(() => db.readUserByEmail('invalid-email')).toThrow('User does not exist');
+      expect(entries).toEqual([user]);
       expect(Object.keys(mockDb.users)).toEqual([user.id]);
       expect(mockDb.users[user.id]).toEqual(user);
     });

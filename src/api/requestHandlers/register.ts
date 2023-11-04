@@ -8,6 +8,12 @@ export const register: RequestHandler = (request, response, next) => {
   const { email, password, name } = request.body;
 
   try {
+    const usersWithEmail = db.queryUsersByEmail(email);
+
+    if (usersWithEmail.length > 0) {
+      throw new Error('User with email already exists');
+    }
+
     const userId = randomUUID();
     const passwordSalt = randomUUID();
     const passwordHash = hash(password, passwordSalt);
@@ -21,10 +27,11 @@ export const register: RequestHandler = (request, response, next) => {
 
     db.createUser(user);
     response.locals.userId = user.id;
+    response.statusCode = 201;
     next();
   } catch (error) {
     response.status(409).json({
-      error: 'User already exists',
+      error: 'User with email already exists',
     });
   }
 };

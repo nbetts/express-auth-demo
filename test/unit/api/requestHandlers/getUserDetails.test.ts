@@ -12,13 +12,13 @@ describe('getUserDetails', () => {
     });
     const nextMock = jest.fn();
 
-    const dbReadUserMock = jest.spyOn(db, 'readUser').mockImplementation(() => ({
+    const dbReadUserMock = jest.spyOn(db, 'readUser').mockReturnValueOnce({
       id: 'user-id',
       email: 'test@example.com',
       passwordHash: 'mock-password-hash',
       passwordSalt: 'mock-password-salt',
       name: 'name',
-    }));
+    });
 
     getUserDetails(request, response, nextMock);
 
@@ -39,7 +39,7 @@ describe('getUserDetails', () => {
 
     getUserDetails(request, response, nextMock);
 
-    const dbReadUserMock = jest.spyOn(db, 'readUser').mockImplementation(() => {
+    jest.spyOn(db, 'readUser').mockImplementationOnce(() => {
       throw new Error('User not found');
     });
 

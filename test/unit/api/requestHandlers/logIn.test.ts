@@ -16,13 +16,13 @@ describe('logIn', () => {
 
     jest.spyOn(authUtilities, 'hash').mockReturnValueOnce('mock-password-hash');
 
-    jest.spyOn(db, 'readUserByEmail').mockImplementation(() => ({
+    jest.spyOn(db, 'queryUsersByEmail').mockReturnValueOnce([{
       id: 'user-id',
       email: 'test@example.com',
       passwordHash: 'mock-password-hash',
       passwordSalt: 'mock-password-salt',
       name: 'name',
-    }));
+    }]);
 
     logIn(request, response, nextMock);
 
@@ -41,9 +41,7 @@ describe('logIn', () => {
     const response = createResponse();
     const nextMock = jest.fn();
 
-    const dbReadUserMock = jest.spyOn(db, 'readUserByEmail').mockImplementation(() => {
-      throw new Error('User does not exist');
-    });
+    jest.spyOn(db, 'queryUsersByEmail').mockReturnValueOnce([]);
 
     logIn(request, response, nextMock);
 
@@ -66,13 +64,13 @@ describe('logIn', () => {
 
     jest.spyOn(authUtilities, 'hash').mockReturnValueOnce('mock-password-hash');
 
-    jest.spyOn(db, 'readUserByEmail').mockImplementation(() => ({
+    jest.spyOn(db, 'queryUsersByEmail').mockReturnValueOnce([{
       id: 'user-id',
       email: 'test@example.com',
       passwordHash: 'incorrect-mock-password-hash',
       passwordSalt: 'mock-password-salt',
       name: 'name',
-    }));
+    }]);
 
     logIn(request, response, nextMock);
 
