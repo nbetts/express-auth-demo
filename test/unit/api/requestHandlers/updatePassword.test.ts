@@ -74,6 +74,9 @@ describe('updatePassword', () => {
 
     expect(response.statusCode).toEqual(401);
     expect(response.locals.deleteExistingSessions).toBeUndefined();
+    expect(response._getJSONData()).toEqual({
+      error: 'Incorrect password',
+    });
     expect(nextMock).not.toHaveBeenCalled();
     expect(dbReadUserMock).toHaveBeenCalledWith('user-id');
   });

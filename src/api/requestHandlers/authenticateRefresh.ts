@@ -15,10 +15,6 @@ export const authenticateRefresh: RequestHandler = (request, response, next) => 
       throw new Error('Compromised refresh token');
     }
 
-    if (!session) {
-      throw new Error('Invalid refresh token');
-    }
-
     response.locals.sessionId = session.id;
     response.locals.userId = userId;
     next();
