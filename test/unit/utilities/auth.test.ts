@@ -2,10 +2,6 @@ import { createJWT, hash, verifyJWT } from "../../../src/utilities/auth";
 import jsonwebtoken from 'jsonwebtoken';
 
 describe('auth utilities', () => {
-  beforeAll(() => {
-    jest.setSystemTime();
-  });
-
   describe('hash', () => {
     it('returns a hashed input using sha256 and hex, with a given salt and pepper', () => {
       const input = 'hello';

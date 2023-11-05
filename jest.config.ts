@@ -19,6 +19,7 @@ const config: Config = {
   ],
   fakeTimers: {
     enableGlobally: true,
+    now: 0,
   },
   restoreMocks: true,
 };
