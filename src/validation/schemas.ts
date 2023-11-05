@@ -42,6 +42,6 @@ export const nameSchema: ParamSchema = {
 
 export const refreshTokenSchema: ParamSchema = {
   isJWT: {
-    errorMessage: 'Must be JWT',
+    errorMessage: 'Must be a valid JWT',
   },
 };

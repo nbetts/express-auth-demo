@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../src/api/app';
 import * as db from '../../src/data/database';
 import { Database } from '../../src/data/types';
+import { testUser } from '../testData';
 
 describe('logIn', () => {
   let mockDb: Database;
@@ -10,13 +11,7 @@ describe('logIn', () => {
     mockDb = {
       sessions: {},
       users: {
-        'user-id': {
-          id: 'user-id',
-          email: 'test@example.com',
-          passwordHash: '0a41c0f4b4e2f603e5fef31175c59b3646ba2dab9c1f451f863ea0ce96792bb5',
-          passwordSalt: '649b9933-ea50-4b97-a1b8-025c92506134',
-          name: 'Nathan',
-        },
+        [testUser.id]: testUser,
       },
     };
     db.createDatabase(mockDb);

@@ -9,7 +9,7 @@ describe('app', () => {
     return routeStack.filter((handler) => handler.name !== 'middleware').map((handler) => handler.handle);
   };
 
-  it.only('contains the correct configuration', () => {
+  it('contains the correct configuration', () => {
     const jsonParserHandler = (app._router.stack as any[]).find((route) => route.name === 'jsonParser');
 
     expect(jsonParserHandler).toBeDefined();
