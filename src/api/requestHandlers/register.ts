@@ -22,7 +22,7 @@ export const register: RequestHandler = (request, response, next) => {
       email,
       passwordHash,
       passwordSalt,
-      name: name.trim(),
+      name,
     };
 
     db.createUser(user);

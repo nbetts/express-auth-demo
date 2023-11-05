@@ -17,7 +17,7 @@ describe('app', () => {
   });
 
   it('contains the correct routes', () => {
-    expect(routes.length).toEqual(7);
+    expect(routes).toHaveLength(7);
   });
 
   it('contains a route to log in', () => {

@@ -6,7 +6,7 @@ export const updateUserDetails: RequestHandler = (request, response) => {
   const { userId } = response.locals;
   const { name } = request.body;
   const partialUserDetails: Partial<UserEntry> = {
-    name: name.trim(),
+    name,
   };
 
   try {

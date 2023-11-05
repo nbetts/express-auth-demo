@@ -3,10 +3,10 @@ import { createRequest, createResponse } from 'node-mocks-http';
 import * as db from "../../../../src/data/database";
 
 describe('updateUserDetails', () => {
-  it('returns a 200 when the request is valid and trims the name property', () => {
+  it('returns a 200 when the request is valid', () => {
     const request = createRequest({
       body: {
-        name: ' updated-name ',
+        name: 'updated-name',
       },
     });
     const response = createResponse({
