@@ -4,8 +4,8 @@ import * as db from '../../data/database';
 import { createJWT, hash } from '../../utilities/auth';
 import { SessionEntry } from '../../data/types';
 
-const accessTokenExpiresInSeconds = 60;
-const refreshTokenExpiresInSeconds = 60 * 2;
+export const accessTokenExpiresInSeconds = 60;
+export const refreshTokenExpiresInSeconds = 60 * 2;
 
 export const createSession: RequestHandler = (request, response) => {
   const { userId, deleteExistingSessions } = response.locals;

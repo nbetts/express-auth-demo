@@ -1,13 +1,21 @@
 import { SessionEntry, UserEntry } from "../src/data/types";
 
-export const validAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWlkIiwiaWF0IjowLCJleHAiOjYwfQ.5zLRTVYm8fytd3fEkoLaiIXu8g--JtmOv_Uk3pCRERU';
-export const validRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWlkIiwiaWF0IjowLCJleHAiOjEyMH0.f6y3ASRBvnYCYOgdGLMVZB6nTzBbUpv7HtDU81_wejY';
+export const testAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWlkIiwiaWF0IjowLCJleHAiOjYwfQ.5zLRTVYm8fytd3fEkoLaiIXu8g--JtmOv_Uk3pCRERU';
+export const testRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWlkIiwiaWF0IjowLCJleHAiOjEyMH0.f6y3ASRBvnYCYOgdGLMVZB6nTzBbUpv7HtDU81_wejY';
+export const testAuthorizationHeader = { Authorization: 'Bearer ' + testAccessToken };
 
-export const testSession: SessionEntry = Object.freeze({
-  id: 'session-id',
+export const testSession1: SessionEntry = Object.freeze({
+  id: 'session-id-1',
   userId: 'user-id',
   refreshTokenHash: '2382accbd3959258b1400575304e140f9204f69a9039ac8b255c67d5412bc00d',
   active: true,
+});
+
+export const testSession2: SessionEntry = Object.freeze({
+  id: 'session-id-2',
+  userId: 'user-id',
+  refreshTokenHash: '2382accbd3959258b1400575304e140f9204f69a9039ac8b255c67d5412bc00d',
+  active: false,
 });
 
 export const testUser: UserEntry = Object.freeze({
