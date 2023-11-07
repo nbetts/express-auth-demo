@@ -1,7 +1,7 @@
 {
   "name": "express-auth-demo",
   "version": "1.0.0",
-  "description": "Simple authorization code flow with JWTs and Express.js",
+  "description": "A demonstration of simple authorization code flow using Express.js.",
   "keywords": [],
   "author": "Nathan Betts",
   "license": "ISC",
