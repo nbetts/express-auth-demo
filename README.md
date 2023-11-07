@@ -1,4 +1,4 @@
-# Learning Auth
+# Express Auth Demo
 
 A demonstration of simple authorization code flow using Node.js and Express.js.
 
