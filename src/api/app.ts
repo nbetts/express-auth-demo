@@ -8,7 +8,7 @@ export const app = express();
 app.disable('x-powered-by');
 app.use(bodyParser.json());
 app.post('/session', validators.logInValidator, [api.validateRequest, api.logIn, api.createSession]);
-app.delete('/session', validators.logOutValidator, [api.validateRequest, api.authenticateRefresh, api.logOut]);
+app.delete('/session', validators.logOutValidator, [api.validateRequest, api.authenticateAccess, api.authenticateRefresh, api.logOut]);
 app.put('/session', validators.refreshSessionValidator, [api.validateRequest, api.authenticateRefresh, api.refreshSession, api.createSession]);
 app.post('/user', validators.registerValidator, [api.validateRequest, api.register, api.logIn, api.createSession]);
 app.get('/user', [api.authenticateAccess, api.getUserDetails]);

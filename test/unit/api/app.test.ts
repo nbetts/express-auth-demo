@@ -35,7 +35,7 @@ describe('app', () => {
     expect(route.route.methods).toEqual({ delete: true });
 
     const requestHandlers = getRequestHandlers(route.route.stack);
-    expect(requestHandlers).toStrictEqual([api.validateRequest, api.authenticateRefresh, api.logOut]);
+    expect(requestHandlers).toStrictEqual([api.validateRequest, api.authenticateAccess, api.authenticateRefresh, api.logOut]);
   });
 
   it('contains a route to refresh the session', () => {
